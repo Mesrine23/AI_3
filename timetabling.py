@@ -1,14 +1,20 @@
 import csp
-import search
-import utils
+#import search
+#import utils
 import csv
 
-class Problem(csp.CSP):
+class Timetabling(csp.CSP):
     
-    def __init__(self, semester, courses, professors, difficulty, lab):
+    def __init__(self, semester, courses, professor, difficulty, lab):
         self.variables = []
         self.domains = {}
         self.neighbors = {}
+
+
+        self.semesters = semester
+        self.professors = professor
+        self.difficulties = difficulty
+        self.labs = lab
 
         #init variables with courses
         self.variables = courses
@@ -47,13 +53,47 @@ class Problem(csp.CSP):
                         neighbs.append(courses[crs])
             neighb[courses[nb]] = neighbs
         self.neighbors = neighb
-            
-
-        csp.CSP.__init__(self , self.variables , self.domains, self.neighbors, self.var_constrains)
+        
 
 
-    def var_constrains(A,a,B,b):
-        pass
+        csp.CSP.__init__(self , self.variables , self.domains, self.neighbors, self.var_constraints)
+
+
+    def var_constraints(self,A,a,B,b):
+        #oxi idia mera & idia wra
+        if (a==b): 
+            return False
+        
+        #oxi idio etos-eksamino sthn idia mera
+        if(a[0]==b[0]): #idia mera
+            courseA=-1
+            courseB=-1
+            for i in range(len(self.variables)):
+                if(self.variables[i]==A):
+                    courseA = i
+                if(self.variables[i]==B):
+                    courseB = i
+                if(courseA!=-1 and courseB!=-1):
+                    break
+            if(self.semesters[courseA]==self.semesters[courseB]): #idio etos
+                return False
+        
+        #keno 2 hmerwn anamesa se 2 duskola mathimata
+        if(abs(a[0]-b[0])<=2): #ligotero apo 2 meres diafora
+            courseA=-1
+            courseB=-1
+            for i in range(len(self.variables)):
+                if(self.variables[i]==A):
+                    courseA = i
+                if(self.variables[i]==B):
+                    courseB = i
+                if(courseA!=-1 and courseB!=-1):
+                    break
+            if(difficulty[courseA]=="TRUE" and difficulty[courseB]=="TRUE"): #an einai kai ta 2 duskola mathimata
+                return False
+        
+        
+        return True
 
 
 
@@ -80,9 +120,10 @@ if __name__=='__main__':
             line_count += 1
 
 
-    #print("dict ->",dict)
+    problem = Timetabling(semester,courses,professors,difficulty,lab)
 
-    #problem = Problem(semester,courses,professors,difficulty,lab)
+    csp.backtracking_search(problem)
+    problem.display(problem.infer_assignment())
     
     
 
