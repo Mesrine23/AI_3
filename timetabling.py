@@ -34,12 +34,26 @@ class Problem(csp.CSP):
         self.domains = dom
 
         #init neighbors
-        #for i in range(len(courses)):
+        neighb = {}
+        for nb in range(len(courses)):
+            neighbs = []
+            for crs in range(len(courses)):
+                if(courses[nb]!=courses[crs]):
+                    if(semester[nb]==semester[crs]):
+                        neighbs.append(courses[crs])
+                    elif(professors[nb]==professors[crs]):
+                        neighbs.append(courses[crs])
+                    elif(difficulty[nb]=="TRUE" and difficulty[crs]=="TRUE"):
+                        neighbs.append(courses[crs])
+            neighb[courses[nb]] = neighbs
+        self.neighbors = neighb
             
 
-        csp.CSP.__init__(self , self.variables , self.domains)
+        csp.CSP.__init__(self , self.variables , self.domains, self.neighbors, self.var_constrains)
 
 
+    def var_constrains(A,a,B,b):
+        pass
 
 
 
@@ -65,22 +79,6 @@ if __name__=='__main__':
                 lab.append(row[4])
             line_count += 1
 
-    neighb = {}
-    for nb in range(len(courses)):
-        neighbs = []
-        for crs in range(len(courses)):
-            if(courses[nb]!=courses[crs]):
-                if(semester[nb]==semester[crs]):
-                    neighbs.append(courses[crs])
-                elif(professors[nb]==professors[crs]):
-                    neighbs.append(courses[crs])
-                elif(difficulty[nb]=="TRUE" and difficulty[crs]=="TRUE"):
-                    neighbs.append(courses[crs])
-        neighb[courses[nb]] = neighbs
-
-    for course in courses:
-        print(neighb[course])
-        print()
 
     #print("dict ->",dict)
 
