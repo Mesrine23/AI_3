@@ -79,7 +79,7 @@ class Timetabling(csp.CSP):
                 return False
         
         #keno 2 hmerwn anamesa se 2 duskola mathimata
-        if(abs(a[0]-b[0])<=2): #ligotero apo 2 meres diafora
+        if(abs(a[0]-b[0])<2): #ligotero apo 2 meres diafora
             courseA=-1
             courseB=-1
             for i in range(len(self.variables)):
@@ -89,10 +89,43 @@ class Timetabling(csp.CSP):
                     courseB = i
                 if(courseA!=-1 and courseB!=-1):
                     break
-            if(difficulty[courseA]=="TRUE" and difficulty[courseB]=="TRUE"): #an einai kai ta 2 duskola mathimata
+            if(self.difficulty[courseA]=="TRUE" and self.difficulty[courseB]=="TRUE"): #an einai kai ta 2 duskola mathimata
                 return False
         
+        #oxi idios kathigitis thn idia mera
+        if(a[0]==b[0]): #idia mera
+            courseA=-1
+            courseB=-1
+            for i in range(len(self.variables)):
+                if(self.variables[i]==A):
+                    courseA = i
+                if(self.variables[i]==B):
+                    courseB = i
+                if(courseA!=-1 and courseB!=-1):
+                    break
+            if(self.professors[courseA]==self.professors[courseB]): #an einai kai ta 2 duskola mathimata
+                return False
         
+        #provlima me ergasthrio
+        if(a[0]==b[0]):
+            courseA=-1
+            courseB=-1
+            for i in range(len(self.variables)):
+                if(self.variables[i]==A):
+                    courseA = i
+                if(self.variables[i]==B):
+                    courseB = i
+                if(courseA!=-1 and courseB!=-1):
+                    break
+            if(self.labs[courseA]=="TRUE" and self.labs[courseB]=="TRUE"): #kai ta 2 ergasthrio
+                return False
+            elif(self.labs[courseA]=="TRUE"): #mono to ena apo ta 2
+                if( (a[1]=="9-12" and b[1]=="12-3") or (a[1]=="12-3" and b[1]=="3-6") ):
+                    return False
+            elif(self.labs[courseB]=="TRUE"):
+                if( (b[1]=="9-12" and a[1]=="12-3") or (b[1]=="12-3" and a[1]=="3-6") ):
+                    return False
+
         return True
 
 
