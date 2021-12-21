@@ -60,6 +60,10 @@ class Timetabling(csp.CSP):
 
 
     def var_constraints(self,A,a,B,b):
+        #oxi idio mathima
+        if(A==B):
+            return False
+
         #oxi idia mera & idia wra
         if (a==b): 
             return False
@@ -89,7 +93,7 @@ class Timetabling(csp.CSP):
                     courseB = i
                 if(courseA!=-1 and courseB!=-1):
                     break
-            if(self.difficulty[courseA]=="TRUE" and self.difficulty[courseB]=="TRUE"): #an einai kai ta 2 duskola mathimata
+            if(self.difficulties[courseA]=="TRUE" and self.difficulties[courseB]=="TRUE"): #an einai kai ta 2 duskola mathimata
                 return False
         
         #oxi idios kathigitis thn idia mera
