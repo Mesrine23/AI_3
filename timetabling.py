@@ -45,29 +45,18 @@ class Timetabling(csp.CSP):
             neighbs = []
             for crs in range(len(courses)):
                 if(courses[nb]!=courses[crs]):
-                    if(semester[nb]==semester[crs]):
-                        neighbs.append(courses[crs])
-                    elif(professors[nb]==professors[crs]):
-                        neighbs.append(courses[crs])
-                    elif(difficulty[nb]=="TRUE" and difficulty[crs]=="TRUE"):
                         neighbs.append(courses[crs])
             neighb[courses[nb]] = neighbs
         self.neighbors = neighb
-        
-
 
         csp.CSP.__init__(self , self.variables , self.domains, self.neighbors, self.var_constraints)
 
 
     def var_constraints(self,A,a,B,b):
-        #oxi idio mathima
-        if(A==B):
+        #oxi idia mera & idia wra OR idio mathima
+        if (a==b or A==B): 
             return False
-
-        #oxi idia mera & idia wra
-        if (a==b): 
-            return False
-        
+         
         #oxi idio etos-eksamino sthn idia mera
         if(a[0]==b[0]): #idia mera
             courseA=-1
