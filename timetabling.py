@@ -148,7 +148,9 @@ if __name__=='__main__':
 
     problem = Timetabling(semester,courses,professors,difficulty,lab)
 
-    csp.backtracking_search(problem)
+    #csp.backtracking_search(problem)
+    #csp.backtracking_search(problem, csp.mrv, csp.lcv , csp.mac)
+    csp.backtracking_search(problem, csp.mrv, csp.lcv , csp.forward_checking)
     problem.display(problem.infer_assignment())
     
     
