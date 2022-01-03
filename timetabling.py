@@ -2,6 +2,7 @@ import csp
 #import search
 #import utils
 import csv
+import sys
 
 class Timetabling(csp.CSP):
     
@@ -49,7 +50,15 @@ class Timetabling(csp.CSP):
             neighb[courses[nb]] = neighbs
         self.neighbors = neighb
 
-        csp.CSP.__init__(self , self.variables , self.domains, self.neighbors, self.var_constraints)
+        #init neighbors in constraints as a list of tuples -> [(a1,b1),(a2,b2),...]
+        #for dom/wdeg
+        constrained_neighbors = []
+        for variable in self.variables:
+            for neighbor in self.neighbors:
+                if(variable!=neighbor):
+                    constrained_neighbors.append((variable,neighbor))
+
+        csp.CSP.__init__(self , self.variables , self.domains, self.neighbors, self.var_constraints, constrained_neighbors)
 
 
     def var_constraints(self,A,a,B,b):
@@ -148,10 +157,25 @@ if __name__=='__main__':
 
     problem = Timetabling(semester,courses,professors,difficulty,lab)
 
-    csp.backtracking_search(problem)
+
+    """if(sys.argv[1] == "mac"):
+        csp.backtracking_search(problem, csp.mrv, csp.lcv, csp.mac)
+    elif(sys.argv[1] == "fc+mrv"):
+        csp.backtracking_search(problem, csp.mrv, csp.lcv, csp.forward_checking)
+    elif(sys.argv[1] == "mincon"):
+        out = csp.min_conflicts(problem)
+        print(out)
+    elif(sys.argv[1] == "bt"):
+        csp.backtracking_search(problem)
+    elif(sys.argv[1] == "bt+mrv"):
+        csp.backtracking_search(problem, csp.mrv)"""
+    #csp.backtracking_search(problem)
     #csp.backtracking_search(problem, csp.mrv, csp.lcv , csp.mac)
+    csp.backtracking_search(problem, csp.dom_wdeg, csp.lcv , csp.mac)
     #csp.backtracking_search(problem, csp.mrv, csp.lcv , csp.forward_checking)
     #problem.display(problem.infer_assignment())
+    #out = csp.min_conflicts(problem)
+    #print(out)
     problem.my_display2()
     
     

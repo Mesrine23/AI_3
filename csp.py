@@ -51,7 +51,7 @@ class CSP(search.Problem):
         display(a)              Print a human-readable representation
     """
 
-    def __init__(self, variables, domains, neighbors, constraints):
+    def __init__(self, variables, domains, neighbors, constraints, constr_neighbors):
         """Construct a CSP problem. If variables is empty, it becomes domains.keys()."""
         super().__init__(())
         variables = variables or list(domains.keys())
@@ -61,6 +61,12 @@ class CSP(search.Problem):
         self.constraints = constraints
         self.curr_domains = None
         self.nassigns = 0
+
+        #init weight of constr. neighbors
+        #self.constrained_neighbors = constr_neighbors
+        self.weight = {} #weights for each pair-tuple -> (variable,neighbor)
+        for neighbor in constr_neighbors:
+            self.weight[neighbor] = 1 #in the beginning, we init each pair with weight = 1
 
     def assign(self, var, val, assignment):
         """Add {var: val} to assignment; Discard the old value if any."""
@@ -235,6 +241,11 @@ def revise(csp, Xi, Xj, removals, checks=0):
         if conflict:
             csp.prune(Xi, x, removals)
             revised = True
+
+        if not csp.curr_domains:
+            csp.weight[(Xi, Xj)] += 1
+            csp.weight[(Xj, Xi)] += 1
+
     return revised, checks
 
 
@@ -392,6 +403,28 @@ def num_legal_values(csp, var, assignment):
         return count(csp.nconflicts(var, val, assignment) == 0 for val in csp.domains[var])
 
 
+def dom_wdeg(assignment, csp):
+    """dom/wdeg heuristic."""
+    return argmin_random_tie([v for v in csp.variables if v not in assignment],
+                             key=lambda var: dom_wdeg_heuristic(csp, var, assignment))
+
+def dom_wdeg_heuristic(csp, var, assignment):
+    sum_W = 0
+    dom_len = 0
+
+    if(csp.curr_domains == None): # != None, since curr_dommain is initialized with None
+        dom_len = len(csp.domains[var])
+    else:  
+        dom_len = len(csp.curr_domains[var])
+
+    for neighbor in csp.neighbors[var]:
+        if neighbor not in assignment:
+            sum_W = csp.weight[(var,neighbor)]
+    
+    if(sum_W!=0):
+        return (dom_len/sum_W)
+    else:
+        return dom_len
 # Value ordering
 
 
@@ -421,6 +454,8 @@ def forward_checking(csp, var, value, assignment, removals):
                 if not csp.constraints(var, value, B, b):
                     csp.prune(B, b, removals)
             if not csp.curr_domains[B]:
+                csp.weight[(var,B)] += 1
+                csp.weight[(B,var)] += 1
                 return False
     return True
 
