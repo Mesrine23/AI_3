@@ -171,12 +171,13 @@ if __name__=='__main__':
         csp.backtracking_search(problem, csp.mrv)"""
     #csp.backtracking_search(problem)
     #csp.backtracking_search(problem, csp.mrv, csp.lcv , csp.mac)
-    csp.backtracking_search(problem, csp.dom_wdeg, csp.lcv , csp.mac)
+    #csp.backtracking_search(problem, csp.dom_wdeg, csp.lcv , csp.mac)
     #csp.backtracking_search(problem, csp.mrv, csp.lcv , csp.forward_checking)
     #problem.display(problem.infer_assignment())
-    #out = csp.min_conflicts(problem)
+    out = csp.min_conflicts(problem)
     #print(out)
-    problem.my_display2()
+    print(problem.nassigns)
+    #problem.my_display2()
     
     
 
