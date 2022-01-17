@@ -122,35 +122,6 @@ class CSP(search.Problem):
 
     #######################################################################################################
 
-    def my_display2(self):
-        s = "{:<18} {:^20} {:^26}".format("9:00-12:00","12:00-3:00","3:00-6:00")
-        print("\t\t\t",s)
-        print("___________________\n")
-        for day in range(1,22):
-            print("DAY ",day)
-            lesson1 = " "
-            lesson2 = " "
-            lesson3 = " "
-            for sub in self.variables:
-                day_hour = {sub: self.curr_domains[sub][0] for v in self.variables if v==sub and 1 == len(self.curr_domains[sub])}
-                if(day_hour[sub][0] == day):
-                    if(day_hour[sub][1] == "9-12"):
-                        lesson1 = sub
-                    if(day_hour[sub][1] == "12-3"):
-                       lesson2 = sub
-                    if(day_hour[sub][1] == "3-6"):
-                        lesson3 = sub
-            chars_per_line = 23
-            min1  = min(len(lesson1),len(lesson2),len(lesson3))
-            for i in range(0, min1, chars_per_line):
-                s = "{:<18} | {:^20} | {:^26}".format(lesson1[i:i+chars_per_line],lesson2[i:i+chars_per_line],lesson3[i:i+chars_per_line])
-                print("\t\t\t",s)
-            print("\n___________________")
-
-    #######################################################################################################
-
-
-
     # These are for constraint propagation
 
     def support_pruning(self):

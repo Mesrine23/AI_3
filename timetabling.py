@@ -158,28 +158,17 @@ if __name__=='__main__':
     problem = Timetabling(semester,courses,professors,difficulty,lab)
 
 
-    """if(sys.argv[1] == "mac"):
-        csp.backtracking_search(problem, csp.mrv, csp.lcv, csp.mac)
-    elif(sys.argv[1] == "fc+mrv"):
-        csp.backtracking_search(problem, csp.mrv, csp.lcv, csp.forward_checking)
-    elif(sys.argv[1] == "mincon"):
-        out = csp.min_conflicts(problem)
-        print(out)
-    elif(sys.argv[1] == "bt"):
-        csp.backtracking_search(problem)
-    elif(sys.argv[1] == "bt+mrv"):
-        csp.backtracking_search(problem, csp.mrv)"""
-    #csp.backtracking_search(problem)
-    #csp.backtracking_search(problem, csp.mrv, csp.lcv , csp.mac)
-    #csp.backtracking_search(problem, csp.dom_wdeg, csp.lcv , csp.mac)
-    #csp.backtracking_search(problem, csp.mrv, csp.lcv , csp.forward_checking)
-    #problem.display(problem.infer_assignment())
-    out = csp.min_conflicts(problem)
-    #print(out)
-    print(problem.nassigns)
-    #problem.my_display2()
+    #csp.backtracking_search(problem, csp.mrv, csp.lcv, csp.mac)
     
+    #csp.backtracking_search(problem, csp.mrv, csp.lcv, csp.forward_checking)
+    
+    csp.backtracking_search(problem)
+    
+    #csp.backtracking_search(problem, csp.mrv)
+
+
+    problem.display(problem.infer_assignment())
     
 
-#def backtracking_search(csp, select_unassigned_variable=first_unassigned_variable,
-#                        order_domain_values=unordered_domain_values, inference=no_inference):
+    #out = csp.min_conflicts(problem)
+    #print(out)
