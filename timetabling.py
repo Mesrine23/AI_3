@@ -3,6 +3,7 @@ import csp
 #import utils
 import csv
 import sys
+import time
 
 class Timetabling(csp.CSP):
     
@@ -16,6 +17,7 @@ class Timetabling(csp.CSP):
         self.professors = professor
         self.difficulties = difficulty
         self.labs = lab
+        self.constraints_counter = 0
 
         #init variables with courses
         self.variables = courses
@@ -62,6 +64,7 @@ class Timetabling(csp.CSP):
 
 
     def var_constraints(self,A,a,B,b):
+        self.constraints_counter += 1
         #oxi idia mera & idia wra OR idio mathima
         if (a==b or A==B): 
             return False
@@ -157,18 +160,28 @@ if __name__=='__main__':
 
     problem = Timetabling(semester,courses,professors,difficulty,lab)
 
-
     #csp.backtracking_search(problem, csp.mrv, csp.lcv, csp.mac)
     
     #csp.backtracking_search(problem, csp.mrv, csp.lcv, csp.forward_checking)
-    
-    csp.backtracking_search(problem)
-    
-    #csp.backtracking_search(problem, csp.mrv)
 
+    #csp.backtracking_search(problem, csp.dom_wdeg, csp.lcv, csp.mac)
 
-    problem.display(problem.infer_assignment())
+    #csp.backtracking_search(problem, csp.dom_wdeg, csp.lcv, csp.forward_checking)
+
+    """
+    print("\nElapsed time: ", end-start)
+    print("nassigns: ",problem.nassigns)
+    print("constraints_counter: ",problem.constraints_counter)
+    """
+
+    #problem.display(problem.infer_assignment())
     
-
-    #out = csp.min_conflicts(problem)
+    
+    out = csp.min_conflicts(problem)
     #print(out)
+    end = time.time() #ending time elapsed
+    """
+    print("\nElapsed time: ", end-start)
+    print("nassigns: ",problem.nassigns)
+    print("constraints_counter: ",problem.constraints_counter)
+    """
